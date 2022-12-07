@@ -49,7 +49,7 @@ def update_outerpadding(wb, new_outer_padding, logging=None):
     # child = tree.findall('dashboards/dashboard/zones/zone/zone-style/format/[@attr="margin"]')
 
     for child in tree.findall(".//*[@type-v2='filter']/zone-style/format/[@attr='margin']"):
-        if child is not NONE:
+        if child is not None:
             child.set("value", new_outer_padding)
             matched_flag = True
         log(logging, "Outer padding has been changed")
@@ -59,7 +59,7 @@ def update_outerpadding(wb, new_outer_padding, logging=None):
             log(logging,"Outer padding could not be changed")
 
     for child in tree.findall(".//*[@type-v2='filter']/zone-style/format/[@attr='margin-top']"):
-        if child is not NONE:
+        if child is not None:
             child.set("value", new_outer_padding)
             matched_flag = True
         log(logging,"Outer padding has been changed")
@@ -127,5 +127,15 @@ def all_filters_show_apply_button(wb, logging=None):
 
     for child in tree.findall(".//*[@type-v2='filter']"):
         child.set('show-apply', 'true')
+
+    return wb
+
+
+def make_multi_filters_checkdropdown(wb, logging=None):
+    tree = wb.xml
+
+    for child in tree.findall(".//zone[@type-v2='filter'][@mode='checklist']"):
+        child.set('mode', 'checkdropdown')
+        log(logging, f"Child {child.get('name')} type changed to checkdropdown")
 
     return wb
