@@ -132,3 +132,13 @@ def all_filters_show_apply_button(wb, logging=None):
         child.set('show-apply', 'true')
 
     return wb
+
+
+def make_multi_filters_checkdropdown(wb, logging=None):
+    tree = wb.xml
+
+    for child in tree.findall(".//zone[@type-v2='filter'][@mode='checklist']"):
+        child.set('mode', 'checkdropdown')
+        log(logging, f"Child {child.get('name')} type changed to checkdropdown")
+
+    return wb
