@@ -1,0 +1,7 @@
+services:
+  app:
+    build:
+      context: .
+    entrypoint: "python /app/main.py"
+    volumes:
+      - .:/app
