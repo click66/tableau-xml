@@ -120,3 +120,12 @@ def update_filter_headers(wb, new_filter_header_color, new_filter_header_font_we
 
     # Get the XML we read in above and write the new element
     return wb
+
+
+def all_filters_show_apply_button(wb, logging=None):
+    tree = wb.xml
+
+    for child in tree.findall(".//*[@type-v2='filter']"):
+        child.set('show-apply', 'true')
+
+    return wb

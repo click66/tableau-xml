@@ -1,7 +1,7 @@
 import logging
 import sys
 import TableauDesktopPy as tdp
-from Tableau_Formatter import update_font
+import Tableau_Formatter as tf
 
 DATA_PATH = "/app/_data/"
 OUTPUT_PATH = "/app/_output/"
@@ -17,5 +17,5 @@ logging.basicConfig(format="%(message)s", level=logging.DEBUG, handlers=handlers
 if __name__ == "__main__":
     path = DATA_PATH + 'Spend Analytics Demo 4.0.twb'
     my_workbook = tdp.Workbook(path)
-    my_workbook = update_font(my_workbook, 'Times New Roman', logging=logging)
+    my_workbook = tf.all_filters_show_apply_button(my_workbook, logging)
     my_workbook.save(OUTPUT_PATH + 'Updated.twb')
