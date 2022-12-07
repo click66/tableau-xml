@@ -30,7 +30,7 @@ def update_font(wb, new_font, logging=None):
         if matched_flag == False:
             log(logging, "Font could not be changed")
 
-    wb.save()
+    return wb
     # # Get the XML we read in above and write the new element
     # tree = ET.ElementTree(root)
     # tree.write(wbname, xml_declaration=True, encoding='utf-8')
@@ -69,7 +69,7 @@ def update_outerpadding(wb, new_outer_padding, logging=None):
             log(logging,"Outer padding could not be changed")
 
     # Get the XML we read in above and write the new element
-    wb.save()
+    return wb
 
 
 # Filter headers
@@ -119,5 +119,4 @@ def update_filter_headers(wb, new_filter_header_color, new_filter_header_font_we
             log(logging,"filter heading could not be changed")
 
     # Get the XML we read in above and write the new element
-    wb.save()
-
+    return wb

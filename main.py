@@ -17,4 +17,5 @@ logging.basicConfig(format="%(message)s", level=logging.DEBUG, handlers=handlers
 if __name__ == "__main__":
     path = DATA_PATH + 'Spend Analytics Demo 4.0.twb'
     my_workbook = tdp.Workbook(path)
-    update_font(my_workbook, 'Times New Roman', logging=logging)
+    my_workbook = update_font(my_workbook, 'Times New Roman', logging=logging)
+    my_workbook.save(OUTPUT_PATH + 'Updated.twb')
