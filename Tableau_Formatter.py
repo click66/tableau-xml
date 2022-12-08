@@ -522,16 +522,22 @@ def make_multi_filters_checkdropdown(wb, logging=None):
 ###########################################################
 
 def synchronise_all_filters(wb, logging=None):
-    def clean_copy(e):
-        f = copy.deepcopy(e)
-        f.set('name', f.get('name').partition(' - ')[2])
-        return f
-
     tree = wb.xml
 
     # Get all zones that contain filters
     filters = tree.findall('.//zone[@type-v2="filter"]')
     filter_zones = list(dict.fromkeys(map(lambda e: e.getparent(), filters)))
+
+    def get_name_part_from_dashboard(dashboard_name):
+        for f in filters:
+            p = f.get('name').partition(' - ')
+            if p[0] == dashboard_name:
+                return p[2]
+
+    def clean_copy(e):
+        f = copy.deepcopy(e)
+        f.set('name', '')
+        return f
 
     # Get a unique set of filters (by "param" attribute)
     mapped_filters = reduce(lambda acc, e: acc | {e.get('param'): clean_copy(e)}, filters, {})
@@ -551,6 +557,6 @@ def synchronise_all_filters(wb, logging=None):
     dashboards = tree.findall('.//dashboard')
     for d in dashboards:
         for c in d.findall('.//zone[@type-v2="filter"]'):
-            c.set('name', d.get('name') + ' - ' + c.get('name'))
+            c.set('name', d.get('name') + ' - ' + get_name_part_from_dashboard(d.get('name')))
 
     return wb
