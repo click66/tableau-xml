@@ -551,7 +551,10 @@ def synchronise_all_filters(wb, logging=None):
 
     # Append a copy of all filters to each container zone
     for fz in filter_zones:
+        fzs = fz.find('zone-style')
+        fz.remove(fzs)
         [fz.append(copy.deepcopy(e)) for e in list(mapped_filters.values())]
+        fz.append(fzs)
 
     # Update the filters to contain the appropriate dashboard names
     dashboards = tree.findall('.//dashboard')
