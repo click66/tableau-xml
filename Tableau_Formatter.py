@@ -501,11 +501,13 @@ def synchronise_all_filters(wb, logging=None):
     mapped_filters = reduce(lambda acc, e: acc | {e.get('param'): clean_copy(e)}, filters, {})
 
     # Remove all existing filter elements from workbook
-    for fz in filter_zones:
-        try:
-            [fz.remove(e) for e in filters]
-        except ValueError:
-            pass
+    for filter in filters:
+        filter.getparent().remove(filter)
+    # for fz in filter_zones:
+    #     try:
+    #         [fz.remove(e) for e in filters]
+    #     except ValueError:
+    #         pass
 
     # Append a copy of all filters to each container zone
     for fz in filter_zones:
