@@ -32,7 +32,35 @@ def update_font(wb, new_font, logging=None):
     else:
         if matched_flag == False:
             log(logging, "Font could not be changed")
-    
+            
+
+
+    #Filter
+        #Change original filters
+    for child in tree.findall(".//*[@element='quick-filter-title']/format/[@attr='font-family']"):
+        # print(child)
+        if child is not None:
+            child.set("value", new_font)
+            matched_flag = True
+        log(logging,"Font has been changed")
+    else:
+        if matched_flag == False:
+            # print(tree.findall(".//*[@element='quick-filter-title']/format/[@attr='color']"))
+            log(logging,"Font could not be changed")
+
+
+        #Change manual user updated custom filter
+    for child in tree.findall(".//*[@element='quick-filter']/format/formatted-text/run/[@fontname]"):
+        # print(child)
+        if child is not None:
+            child.set("fontname", new_font)
+            matched_flag = True
+        log(logging,"Font has been changed")
+    else:
+        if matched_flag == False:
+            # print(tree.findall(".//*[@element='quick-filter']/format/[@attr='fontcolor']"))
+            log(logging,"Font could not be changed")
+
     #Parameter
 
         #Change original parameter
@@ -102,10 +130,10 @@ def update_outerpadding(wb, new_outer_padding, logging=None):
     #Parameter
 
         #Change original parameter
-    for child in tree.findall(".//*[@element='parameter-ctrl-title']/format/[@attr='font-family']"):
+    for child in tree.findall(".//*[@element='parameter-ctrl-title']/format/[@attr='margin']"):
         # print(child)
         if child is not None:
-            child.set("value", new_font)
+            child.set("value", new_outer_padding)
             matched_flag = True
         log(logging,"filter heading has been changed")
     else:
@@ -115,10 +143,10 @@ def update_outerpadding(wb, new_outer_padding, logging=None):
 
 
         #Change manual user updated custom parameter
-    for child in tree.findall(".//*[@type-v2='paramctrl']/formatted-text/run/[@fontname]"):
+    for child in tree.findall(".//*[@type-v2='paramctrl']/formatted-text/run/[@attr='margin']"):
         # print(child)
         if child is not None:
-            child.set("fontname", new_font)
+            child.set("value", new_outer_padding)
             matched_flag = True
         log(logging,"filter heading has been changed")
     else:
@@ -466,6 +494,9 @@ def update_filter_headers(wb, new_filter_header_color, new_filter_header_font_si
     return wb
 
 
+
+#Filter apply buttons
+###########################################################
 def all_filters_show_apply_button(wb, logging=None):
     tree = wb.xml
 
@@ -474,22 +505,21 @@ def all_filters_show_apply_button(wb, logging=None):
 
     return wb
 
-
+#Filter drop down
+###########################################################
 def make_multi_filters_checkdropdown(wb, logging=None):
     tree = wb.xml
 
-    for child in tree.findall('zone/[@mode="checklist"]'):
+    for child in tree.findall('.//zone/[@mode="checklist"]'):
         child.set('mode', 'checkdropdown')
-       # log(logging, f"Child {child.get('name')} type changed to checkdropdown")
+        log(logging, f"Child {child.get('name')} type changed to checkdropdown")
 
     return wb
 
 
-<<<<<<< HEAD
-=======
-    return wb
 
-
+#Filter synchronisation
+###########################################################
 def synchronise_all_filters(wb, logging=None):
     def clean_copy(e):
         f = copy.deepcopy(e)
@@ -507,10 +537,16 @@ def synchronise_all_filters(wb, logging=None):
 
     # Remove all existing filter elements from workbook
     for fz in filter_zones:
+        log(logging, f"zone")
         try:
-            [fz.remove(e) for e in filters]
+            for e in filters:
+                log(logging, "filter")
+                fz.remove(e)
+            # [fz.remove(e) for e in filters]
         except ValueError:
             pass
+
+
 
     # Append a copy of all filters to each container zone
     for fz in filter_zones:
@@ -523,4 +559,3 @@ def synchronise_all_filters(wb, logging=None):
             c.set('name', d.get('name') + ' - ' + c.get('name'))
 
     return wb
->>>>>>> 9fb26bfae12463e1633ec64f13a637b3061a86c2
