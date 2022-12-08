@@ -485,11 +485,6 @@ def make_multi_filters_checkdropdown(wb, logging=None):
     return wb
 
 
-<<<<<<< HEAD
-=======
-    return wb
-
-
 def synchronise_all_filters(wb, logging=None):
     def clean_copy(e):
         f = copy.deepcopy(e)
@@ -523,4 +518,3 @@ def synchronise_all_filters(wb, logging=None):
             c.set('name', d.get('name') + ' - ' + c.get('name'))
 
     return wb
->>>>>>> 9fb26bfae12463e1633ec64f13a637b3061a86c2
