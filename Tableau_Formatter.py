@@ -517,12 +517,10 @@ def make_multi_filters_checkdropdown(wb, logging=None):
     return wb
 
 
-<<<<<<< HEAD
 
 #Filter synchronisation
 ###########################################################
-=======
->>>>>>> 28e7ed3ad7270061d7f10304416e69cda2537250
+
 def synchronise_all_filters(wb, logging=None):
     def clean_copy(e):
         f = copy.deepcopy(e)
