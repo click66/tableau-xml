@@ -1,3 +1,6 @@
+import copy
+from functools import reduce
+
 def log(logging, message):
     if logging:
         logging.info(message)
@@ -482,3 +485,42 @@ def make_multi_filters_checkdropdown(wb, logging=None):
     return wb
 
 
+<<<<<<< HEAD
+=======
+    return wb
+
+
+def synchronise_all_filters(wb, logging=None):
+    def clean_copy(e):
+        f = copy.deepcopy(e)
+        f.set('name', f.get('name').partition(' - ')[2])
+        return f
+
+    tree = wb.xml
+
+    # Get all zones that contain filters
+    filters = tree.findall('.//zone[@type-v2="filter"]')
+    filter_zones = list(dict.fromkeys(map(lambda c: c.getparent(), filters)))
+
+    # Get a unique set of filters (by "param" attribute)
+    mapped_filters = reduce(lambda acc, e: acc | {e.get('param'): e}, filters, {})
+
+    # Remove all existing filter elements from workbook
+    for fz in filter_zones:
+        try:
+            [fz.remove(e) for e in filters]
+        except ValueError:
+            pass
+
+    # Append a copy of all filters to each container zone
+    for fz in filter_zones:
+        [fz.append(clean_copy(e)) for e in list(mapped_filters.values())]
+
+    # Update the filters to contain the appropriate dashboard names
+    dashboards = tree.findall('.//dashboard')
+    for d in dashboards:
+        for c in d.findall('.//zone[@type-v2="filter"]'):
+            c.set('name', d.get('name') + ' - ' + c.get('name'))
+
+    return wb
+>>>>>>> 9fb26bfae12463e1633ec64f13a637b3061a86c2
