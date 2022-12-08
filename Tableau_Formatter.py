@@ -157,10 +157,10 @@ def synchronise_all_filters(wb, logging=None):
 
     # Get all zones that contain filters
     filters = tree.findall('.//zone[@type-v2="filter"]')
-    filter_zones = list(dict.fromkeys(map(lambda c: c.getparent(), filters)))
+    filter_zones = list(dict.fromkeys(map(lambda e: e.getparent(), filters)))
 
     # Get a unique set of filters (by "param" attribute)
-    mapped_filters = reduce(lambda acc, e: acc | {e.get('param'): e}, filters, {})
+    mapped_filters = reduce(lambda acc, e: acc | {e.get('param'): clean_copy(e)}, filters, {})
 
     # Remove all existing filter elements from workbook
     for fz in filter_zones:
@@ -171,7 +171,7 @@ def synchronise_all_filters(wb, logging=None):
 
     # Append a copy of all filters to each container zone
     for fz in filter_zones:
-        [fz.append(clean_copy(e)) for e in list(mapped_filters.values())]
+        [fz.append(copy.deepcopy(e)) for e in list(mapped_filters.values())]
 
     # Update the filters to contain the appropriate dashboard names
     dashboards = tree.findall('.//dashboard')
